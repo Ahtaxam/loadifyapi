@@ -1,0 +1,32 @@
+{
+  "name": "loadifyapi",
+  "version": "1.0.0",
+  "description": "The is Api of project loadify that provide services for cargo shippment",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"nodemon app.js"
+  },
+  "keywords": [
+    "javascript",
+    "node",
+    "express",
+    "mongo",
+    "jwt"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "joi": "^17.13.1",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "mongoose": "^8.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.1"
+  }
+}
