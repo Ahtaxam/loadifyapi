@@ -2,10 +2,15 @@ const express = require("express");
 const connectToDB = require("./mongoConnection");
 const app = express();
 const cors = require("cors");
-const userRoute = require("./routes/user");
+const bodyParser = require("body-parser")
 
-const port = process.env.PORT || 3000;
-app.use(express.json());
+const userRoute = require("./routes/user");
+const AddsRoute = require("./routes/postAdd")
+
+const port = process.env.PORT || 3001;
+
+app.use(express.urlencoded({extended:true}))
+app.use(express.json())
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -13,6 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/adds", AddsRoute)
 
 const startServer = async () => {
   try {
