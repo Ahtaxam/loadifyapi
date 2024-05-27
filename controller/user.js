@@ -8,7 +8,7 @@ const _ = require("lodash");
 const createUser = async (req, res) => {
   const result = validateUser(req.body);
   if (result.error) {
-    res.status(400).json(result.error.details[0].message);
+    res.status(400).json({message:result.error.details[0].message});
     return;
   }
 
@@ -48,7 +48,7 @@ const authUser = async (req, res) => {
   try {
     const result = validateLoginData(req.body);
     if (result.error) {
-      res.status(400).send(result.error.details[0].message);
+      res.status(400).send({message:result.error.details[0].message});
       return;
     }
     const user = await USER.findOne({ email: req.body.email });
@@ -98,7 +98,7 @@ function validateUser(user) {
     password: Joi.string().min(8).required(),
     role: Joi.string().required(),
     address: Joi.string().required(),
-    phoneNumber: Joi.string().required(),
+    phoneNumber: Joi.number().required(),
   });
 
   return schema.validate({

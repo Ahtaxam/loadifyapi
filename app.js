@@ -1,20 +1,18 @@
 const express = require("express");
 const connectToDB = require("./mongoConnection");
 const app = express();
+const cors = require("cors");
 const userRoute = require("./routes/user");
-
 
 const port = process.env.PORT || 3000;
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
-res.status(200).json("Hello From Server")
-})
+  res.status(200).json("Hello From Server");
+});
 
-app.use("/api/v1/user", userRoute)
-
-
-
+app.use("/api/v1/user", userRoute);
 
 const startServer = async () => {
   try {
