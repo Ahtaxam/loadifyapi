@@ -5,7 +5,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser")
 
 const userRoute = require("./routes/user");
-const AddsRoute = require("./routes/postAdd")
+const loaderRoute = require("./routes/postLoaderAdd");
+const inventoryRoute = require("./routes/postInventoryAdd")
 
 const port = process.env.PORT || 3001;
 
@@ -18,7 +19,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/user", userRoute);
-app.use("/api/v1/adds", AddsRoute)
+app.use("/api/v1/loader", loaderRoute);
+app.use("/api/v1/inventory", inventoryRoute)
 
 const startServer = async () => {
   try {
