@@ -25,22 +25,20 @@ const vehicleAddSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  cnicPicture: [
-    {
-      types: String,
-      required: true,
-    },
-  ],
+  cnicPicture: {
+    type: String,
+    required: true,
+  },
+
   licenceNumber: {
     type: String,
     required: true,
   },
-  licencePicture: [
-    {
-      types: String,
-      required: true,
-    },
-  ],
+  licencePicture: {
+    type: String,
+    required: true,
+  },
+
   countryName: {
     type: String,
     required: true,
@@ -63,9 +61,11 @@ const vehicleAddSchema = new mongoose.Schema({
   },
   vehiclePicture: [
     {
-      types: String,
+      type: String,
       required: true,
+      
     },
+
   ],
 });
 
