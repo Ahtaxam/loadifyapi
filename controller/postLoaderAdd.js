@@ -9,6 +9,7 @@ const postTruckLoaderAdds = async (req, res, next) => {
       return;
     }
     const files = req.files;
+    console.log(files);
 
     if (!files) {
       return res
