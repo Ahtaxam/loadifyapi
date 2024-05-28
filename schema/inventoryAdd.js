@@ -1,15 +1,11 @@
 const mongoose = require('mongoose');
 
-const vehicleAddSchema = new mongoose.Schema({
-  vehicleName: {
+const inventoryAddSchema = new mongoose.Schema({
+  inventorySize: {
     type: String,
     required: true,
   },
-  vehicleModel: {
-    type: String,
-    required: true,
-  },
-  vehicleNumber: {
+  inventoryWeight: {
     type: String,
     required: true,
   },
@@ -21,24 +17,6 @@ const vehicleAddSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  ownerCnic: {
-    type: String,
-    required: true,
-  },
-  cnicPicture: {
-    type: String,
-    required: true,
-  },
-
-  licenceNumber: {
-    type: String,
-    required: true,
-  },
-  licencePicture: {
-    type: String,
-    required: true,
-  },
-
   countryName: {
     type: String,
     required: true,
@@ -55,22 +33,25 @@ const vehicleAddSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  vehicleType: {
+  inventoryType: {
     type: String,
     required: true,
   },
-  vehiclePicture: [
+  inventoryPicture: [
     {
       type: String,
       required: true,
     },
   ],
   postedBy: {
-    ref: 'User',
     type: mongoose.Schema.Types.ObjectId,
-    required:true
+    ref: 'User',
+    required: true,
   },
 });
 
-const vehicleAddModel = new mongoose.model('VehicleAdd', vehicleAddSchema);
-module.exports = vehicleAddModel;
+const inventoryAddModel = new mongoose.model(
+  'InventoryAdd',
+  inventoryAddSchema
+);
+module.exports = inventoryAddModel;
