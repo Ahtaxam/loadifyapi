@@ -1,33 +1,42 @@
-const express = require("express");
-const connectToDB = require("./mongoConnection");
+const express = require('express');
+const connectToDB = require('./mongoConnection');
+const cors = require('cors');
 const app = express();
-const cors = require("cors");
-const bodyParser = require("body-parser")
+const http = require('http');
+const server = http.createServer(app);
 
-const userRoute = require("./routes/user");
-const loaderRoute = require("./routes/postLoaderAdd");
-const inventoryRoute = require("./routes/postInventoryAdd")
+const userRoute = require('./routes/user');
+const loaderRoute = require('./routes/postLoaderAdd');
+const inventoryRoute = require('./routes/postInventoryAdd');
+const { initializeSocket } = require('./config/socket');
 
 const port = process.env.PORT || 3001;
 
 app.use(cors());
-app.use(express.urlencoded({extended:true,limit:"50mb"}))
-app.use(express.json())
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.status(200).json("Hello From Server");
+// const io = new Server(server);
+
+app.get('/', (req, res) => {
+  res.status(200).json('Hello From Server');
 });
 
-app.use("/api/v1/user", userRoute);
-app.use("/api/v1/loader", loaderRoute);
-app.use("/api/v1/inventory", inventoryRoute)
+// io.on('connection', (socket) => {
+//   console.log('A user connected: ', socket);
+// });
+
+app.use('/api/v1/user', userRoute);
+app.use('/api/v1/loader', loaderRoute);
+app.use('/api/v1/inventory', inventoryRoute);
 
 const startServer = async () => {
   try {
     await connectToDB();
-    app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`server is listening on port ${port}`);
     });
+    initializeSocket(server)
   } catch (err) {
     console.log(`Failed to start server ${err}`);
   }
