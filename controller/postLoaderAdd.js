@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { default: mongoose } = require('mongoose');
 const VEHICLEADD = require('../schema/vehicleAdd');
 
 const postTruckLoaderAdds = async (req, res, next) => {
@@ -107,6 +108,31 @@ const deleteLoaderAdd = async (req, res) => {
   }
 };
 
+const getCurrentUserLoaderAdds = async (req, res) => {
+  const userId = new mongoose.Types.ObjectId(req.user._id);
+
+  try {
+    const loader = await VEHICLEADD.find({
+      postedBy: userId,
+    });
+    if (!loader) {
+      res.status(200).json({
+        message: 'No Add posted',
+        data: loader,
+        status: 402,
+      });
+      return;
+    }
+    res.status(200).json({
+      message: 'Fetched successfully',
+      data: loader,
+      status: 200,
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 const validateVehicleAdd = (data) => {
   const schema = Joi.object({
     vehicleName: Joi.string().required(),
@@ -131,4 +157,5 @@ module.exports = {
   fetchAllLoaders,
   getLoaderById,
   deleteLoaderAdd,
+  getCurrentUserLoaderAdds,
 };

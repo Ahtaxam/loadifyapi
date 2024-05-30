@@ -4,6 +4,7 @@ const {
   fetchAllLoaders,
   getLoaderById,
   deleteLoaderAdd,
+  getCurrentUserLoaderAdds,
 } = require('../controller/postLoaderAdd');
 const isAuth = require('../middleware/isAuth');
 const route = express.Router();
@@ -28,6 +29,7 @@ route.post(
   postTruckLoaderAdds
 );
 
+route.get('/currentuser', isAuth, getCurrentUserLoaderAdds)
 route.get('/all', fetchAllLoaders);
 route.get('/:id',  getLoaderById);
 route.delete('/:id', isAuth, deleteLoaderAdd);
