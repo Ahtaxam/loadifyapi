@@ -29,6 +29,6 @@ route.post(
 );
 
 route.get('/all', fetchAllLoaders);
-route.get('/:id', isAuth, getLoaderById);
+route.get('/:id',  getLoaderById);
 route.delete('/:id', isAuth, deleteLoaderAdd);
 module.exports = route;

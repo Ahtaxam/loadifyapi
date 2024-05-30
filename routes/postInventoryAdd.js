@@ -16,7 +16,7 @@ route.post(
 );
 
 route.get("/all", fetchAllInventoryAdd);
-route.get("/:id", isAuth, getInventoryById);
+route.get("/:id",  getInventoryById);
 route.delete("/:id", isAuth, deleteInventoryAdd)
 
 module.exports = route;
