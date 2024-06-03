@@ -6,12 +6,14 @@ const {
   deleteLoaderAdd,
   getCurrentUserLoaderAdds,
 } = require('../controller/postLoaderAdd');
+const {  canPostLoaderAdd } = require('../middleware/canPostAdd');
 const isAuth = require('../middleware/isAuth');
 const route = express.Router();
 const { upload } = require('../storage/storge');
 route.post(
   '/postadd',
   isAuth,
+  canPostLoaderAdd,
   upload.fields([
     {
       name: "cnicPicture",

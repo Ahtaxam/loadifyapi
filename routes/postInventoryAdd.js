@@ -6,12 +6,14 @@ const {
   deleteInventoryAdd,
   getCurrentUserInventoryAdds,
 } = require('../controller/postInventoryAdd');
+const { canPostInventoryAdd } = require('../middleware/canPostAdd');
 const isAuth = require('../middleware/isAuth');
 const route = express.Router();
 const { upload } = require('../storage/storge');
 route.post(
   '/postadd',
   isAuth,
+  canPostInventoryAdd,
   upload.fields([
     {
       name: 'inventoryPicture',
