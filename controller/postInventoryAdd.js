@@ -38,10 +38,10 @@ const postInventoryAdds = async (req, res, next) => {
 
 const fetchAllInventoryAdd = async (req, res) => {
   try {
-    const loaders = await INVENTORYADD.find({});
+    const inventories = await INVENTORYADD.find();
     res.status(200).json({
       message: 'inventories fetched successfully',
-      data: loaders,
+      data: inventories,
       status: 200,
     });
   } catch (error) {
