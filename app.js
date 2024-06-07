@@ -8,6 +8,8 @@ const server = http.createServer(app);
 const userRoute = require('./routes/user');
 const loaderRoute = require('./routes/postLoaderAdd');
 const inventoryRoute = require('./routes/postInventoryAdd');
+const messageRoute = require("./routes/message")
+
 const { initializeSocket } = require('./config/socket');
 
 const port = process.env.PORT || 3001;
@@ -29,6 +31,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/loader', loaderRoute);
 app.use('/api/v1/inventory', inventoryRoute);
+app.use('/api/v1/message', messageRoute)
 
 const startServer = async () => {
   try {
