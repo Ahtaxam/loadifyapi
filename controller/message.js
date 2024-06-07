@@ -1,7 +1,8 @@
-const Message = require('../schema/message');
-const Conversation = require('../schema/conversation');
-const Joi = require('joi');
-const mongoose = require('mongoose');
+const Message = require("../schema/message");
+const Conversation = require("../schema/conversation");
+const User = require("../schema/user");
+const Joi = require("joi");
+const mongoose = require("mongoose");
 
 const sendMessage = async (req, res) => {
   try {
@@ -49,13 +50,40 @@ const getMessages = async (req, res) => {
 
     let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
-    }).populate('messages');
+    }).populate("messages");
 
     if (!conversation) {
       return res.status(200).json([]);
     }
 
     res.status(200).json(conversation.messages);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const getChatUser = async (req, res) => {
+  try {
+    const id = new mongoose.Types.ObjectId(req.user._id);
+    const conversations = await Conversation.find({
+      participants: { $in: [id] },
+    });
+
+    const userIds = [];
+    conversations.forEach((convo) => {
+      convo.participants.forEach((participantId) => {
+        if (
+          !participantId.equals(id) &&
+          !userIds.includes(participantId.toString())
+        ) {
+          userIds.push(participantId.toString());
+        }
+      });
+    });
+    const users = await User.find({
+      _id: { $in: userIds },
+    });
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -69,4 +97,4 @@ const validateMessage = (data) => {
   return schema.validate(data);
 };
 
-module.exports = { sendMessage, getMessages };
+module.exports = { sendMessage, getMessages, getChatUser };

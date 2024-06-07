@@ -58,7 +58,7 @@ const fetchAllLoaders = async (req, res) => {
 const getLoaderById = async (req, res) => {
   const { id } = req.params;
   try {
-    const loader = await VEHICLEADD.findById({ _id: id });
+    const loader = await VEHICLEADD.findById({ _id: id }).populate("postedBy");
     if (!loader) {
       res.status(200).json({
         message: 'Invalid Id',
