@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const inventoryAddSchema = new mongoose.Schema({
   inventorySize: {
@@ -45,13 +45,17 @@ const inventoryAddSchema = new mongoose.Schema({
   ],
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
+  },
+  status: {
+    type: String,
+    default: "posted",
   },
 });
 
 const inventoryAddModel = new mongoose.model(
-  'InventoryAdd',
+  "InventoryAdd",
   inventoryAddSchema
 );
 module.exports = inventoryAddModel;
