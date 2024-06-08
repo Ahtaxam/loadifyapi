@@ -3,6 +3,7 @@ const Conversation = require("../schema/conversation");
 const User = require("../schema/user");
 const Joi = require("joi");
 const mongoose = require("mongoose");
+const { getReceiverSocketId, getIo } = require("../config/socket");
 
 const sendMessage = async (req, res) => {
   try {
@@ -36,6 +37,11 @@ const sendMessage = async (req, res) => {
     }
 
     await Promise.all([conversation.save(), newMessage.save()]);
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    const io = getIo();
+    console.log(receiverSocketId);
+    io.to(receiverSocketId).emit("newMessage", newMessage);
 
     res.status(200).json(newMessage);
   } catch (error) {

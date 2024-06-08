@@ -1,6 +1,6 @@
-const Joi = require('joi');
-const mongoose = require('mongoose');
-const INVENTORYADD = require('../schema/inventoryAdd');
+const Joi = require("joi");
+const mongoose = require("mongoose");
+const INVENTORYADD = require("../schema/inventoryAdd");
 
 const postInventoryAdds = async (req, res, next) => {
   try {
@@ -14,7 +14,7 @@ const postInventoryAdds = async (req, res, next) => {
     if (!file) {
       return res
         .status(400)
-        .json({ message: 'ERROR: uploading, file! try again' });
+        .json({ message: "ERROR: uploading, file! try again" });
     }
     const inventoryPicture = file.inventoryPicture
       ? file.inventoryPicture[0].path
@@ -27,7 +27,7 @@ const postInventoryAdds = async (req, res, next) => {
     });
     const doc = await inventoryAdd.save();
     res.status(200).json({
-      message: 'Add Posted Successfully',
+      message: "Add Posted Successfully",
       data: doc,
       status: 200,
     });
@@ -40,7 +40,7 @@ const fetchAllInventoryAdd = async (req, res) => {
   try {
     const inventories = await INVENTORYADD.find();
     res.status(200).json({
-      message: 'inventories fetched successfully',
+      message: "inventories fetched successfully",
       data: inventories,
       status: 200,
     });
@@ -52,17 +52,19 @@ const fetchAllInventoryAdd = async (req, res) => {
 const getInventoryById = async (req, res) => {
   const { id } = req.params;
   try {
-    const inventory = await INVENTORYADD.findById({ _id: id });
+    const inventory = await INVENTORYADD.findById({ _id: id }).populate(
+      "postedBy"
+    );
     if (!inventory) {
       res.status(200).json({
-        message: 'Invalid Id',
+        message: "Invalid Id",
         data: inventory,
         status: 402,
       });
       return;
     }
     res.status(200).json({
-      message: 'Fetched successfully',
+      message: "Fetched successfully",
       data: inventory,
       status: 200,
     });
@@ -77,14 +79,14 @@ const deleteInventoryAdd = async (req, res) => {
     const add = await INVENTORYADD.findOne({ _id: id });
     if (!add) {
       res.status(200).json({
-        message: 'Invalid Id',
+        message: "Invalid Id",
         status: 402,
       });
       return;
     }
     if (add.postedBy.toString() !== req.user._id.toString()) {
       res.status(403).json({
-        message: 'UnAuthorized! you can not perform operation',
+        message: "UnAuthorized! you can not perform operation",
         status: 403,
       });
       return;
@@ -92,7 +94,7 @@ const deleteInventoryAdd = async (req, res) => {
     const inventory = await INVENTORYADD.findByIdAndDelete({ _id: id });
 
     res.status(200).json({
-      message: 'Deleted successfully',
+      message: "Deleted successfully",
       data: inventory,
       status: 200,
     });
@@ -107,14 +109,14 @@ const getCurrentUserInventoryAdds = async (req, res) => {
     const inventory = await INVENTORYADD.find({ postedBy: userId });
     if (!inventory) {
       res.status(200).json({
-        message: 'No Add Posted',
+        message: "No Add Posted",
         data: inventory,
         status: 402,
       });
       return;
     }
     res.status(200).json({
-      message: 'Fetched successfully',
+      message: "Fetched successfully",
       data: inventory,
       status: 200,
     });
