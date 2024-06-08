@@ -1,30 +1,34 @@
-const express = require('express');
+const express = require("express");
 const {
   postInventoryAdds,
   fetchAllInventoryAdd,
   getInventoryById,
   deleteInventoryAdd,
   getCurrentUserInventoryAdds,
-} = require('../controller/postInventoryAdd');
-const { canPostInventoryAdd } = require('../middleware/canPostAdd');
-const isAuth = require('../middleware/isAuth');
+  shippedInventory,
+  getAllActiveInventories,
+} = require("../controller/postInventoryAdd");
+const { canPostInventoryAdd } = require("../middleware/canPostAdd");
+const isAuth = require("../middleware/isAuth");
 const route = express.Router();
-const { upload } = require('../storage/storge');
+const { upload } = require("../storage/storge");
 route.post(
-  '/postadd',
+  "/postadd",
   isAuth,
   canPostInventoryAdd,
   upload.fields([
     {
-      name: 'inventoryPicture',
+      name: "inventoryPicture",
       maxCount: 4,
     },
   ]),
   postInventoryAdds
 );
-route.get('/currentuser', isAuth, getCurrentUserInventoryAdds);
-route.get('/all', fetchAllInventoryAdd);
-route.get('/:id', getInventoryById);
-route.delete('/:id', isAuth, deleteInventoryAdd);
+route.get("/currentuser", isAuth, getCurrentUserInventoryAdds);
+route.get("/active", isAuth, getAllActiveInventories)
+route.get("/all", fetchAllInventoryAdd);
+route.get("/:id", getInventoryById);
+route.delete("/:id", isAuth, deleteInventoryAdd);
+route.put("/shipped", isAuth, shippedInventory);
 
 module.exports = route;

@@ -38,7 +38,7 @@ const postInventoryAdds = async (req, res, next) => {
 
 const fetchAllInventoryAdd = async (req, res) => {
   try {
-    const inventories = await INVENTORYADD.find();
+    const inventories = await INVENTORYADD.find({ status: "posted" });
     res.status(200).json({
       message: "inventories fetched successfully",
       data: inventories,
@@ -125,6 +125,47 @@ const getCurrentUserInventoryAdds = async (req, res) => {
   }
 };
 
+const shippedInventory = async (req, res) => {
+  try {
+    const { inventoryId } = req.body;
+    console.log(inventoryId);
+    let result = await INVENTORYADD.findOne({ _id: inventoryId });
+
+    if (!result) {
+      return res.status(404).json({
+        message: "Inventory not found",
+        status: 404,
+      });
+    }
+    result.status = "shipped";
+    await result.save();
+    res.status(200).json({
+      message: "Inventory Shipped Successfully",
+      status: 200,
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const getAllActiveInventories = async (req, res) => {
+  try {
+    const userId = (req.user?._id);
+    const inventories = await INVENTORYADD.find({
+      status: { $ne: "posted" },
+      postedBy: userId,
+    });
+    res.status(200).json({
+      message: "inventories fetched successfully",
+      data: inventories,
+      status: 200,
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 const validateInventoryAdd = (data) => {
   const schema = Joi.object({
     inventorySize: Joi.string().required(),
@@ -147,4 +188,6 @@ module.exports = {
   getInventoryById,
   deleteInventoryAdd,
   getCurrentUserInventoryAdds,
+  shippedInventory,
+  getAllActiveInventories
 };
