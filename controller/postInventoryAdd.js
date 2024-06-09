@@ -1,6 +1,8 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 const INVENTORYADD = require("../schema/inventoryAdd");
+const Booking = require("../schema/booking");
+const LOADER = require("../schema/vehicleAdd");
 
 const postInventoryAdds = async (req, res, next) => {
   try {
@@ -125,46 +127,58 @@ const getCurrentUserInventoryAdds = async (req, res) => {
   }
 };
 
-const shippedInventory = async (req, res) => {
-  try {
-    const { inventoryId } = req.body;
-    console.log(inventoryId);
-    let result = await INVENTORYADD.findOne({ _id: inventoryId });
+// const shippedInventory = async (req, res) => {
+//   try {
+//     const { inventoryId, loaderId } = req.body;
+//     let inventory = await INVENTORYADD.findOne({ _id: inventoryId });
 
-    if (!result) {
-      return res.status(404).json({
-        message: "Inventory not found",
-        status: 404,
-      });
-    }
-    result.status = "shipped";
-    await result.save();
-    res.status(200).json({
-      message: "Inventory Shipped Successfully",
-      status: 200,
-      data: result,
-    });
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
+//     if (!inventory) {
+//       return res.status(404).json({
+//         message: "Inventory not found",
+//         status: 404,
+//       });
+//     }
+//     inventory.status = "shipped";
 
-const getAllActiveInventories = async (req, res) => {
-  try {
-    const userId = (req.user?._id);
-    const inventories = await INVENTORYADD.find({
-      status: { $ne: "posted" },
-      postedBy: userId,
-    });
-    res.status(200).json({
-      message: "inventories fetched successfully",
-      data: inventories,
-      status: 200,
-    });
-  } catch (error) {
-    res.status(500).json(error);
-  }
-};
+//     let loader = await LOADER.findOne({ _id: loaderId });
+//     console.log(loader);
+//     loader.status = "booked";
+//     await loader.save()
+
+//     const booking = new Booking({
+//       loaderId,
+//       inventoryId,
+//     });
+
+
+//     await Promise.all([booking.save(), loader.save(), inventory.save()]);
+
+//     res.status(200).json({
+//       message: "Inventory Shipped Successfully",
+//       status: 200,
+//       data: "inventory",
+//     });
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// };
+
+// const getAllActiveInventories = async (req, res) => {
+//   try {
+//     const userId = req.user?._id;
+//     const inventories = await INVENTORYADD.find({
+//       status: { $ne: "posted" },
+//       postedBy: userId,
+//     });
+//     res.status(200).json({
+//       message: "inventories fetched successfully",
+//       data: inventories,
+//       status: 200,
+//     });
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// };
 
 const validateInventoryAdd = (data) => {
   const schema = Joi.object({
@@ -188,6 +202,6 @@ module.exports = {
   getInventoryById,
   deleteInventoryAdd,
   getCurrentUserInventoryAdds,
-  shippedInventory,
-  getAllActiveInventories
+  // shippedInventory,
+  // getAllActiveInventories,
 };

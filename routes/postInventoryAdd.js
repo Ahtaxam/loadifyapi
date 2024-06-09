@@ -25,10 +25,10 @@ route.post(
   postInventoryAdds
 );
 route.get("/currentuser", isAuth, getCurrentUserInventoryAdds);
-route.get("/active", isAuth, getAllActiveInventories)
+// route.get("/active", isAuth, getAllActiveInventories)
 route.get("/all", fetchAllInventoryAdd);
 route.get("/:id", getInventoryById);
 route.delete("/:id", isAuth, deleteInventoryAdd);
-route.put("/shipped", isAuth, shippedInventory);
+// route.put("/shipped", isAuth, shippedInventory);
 
 module.exports = route;

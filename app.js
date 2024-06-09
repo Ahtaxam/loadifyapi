@@ -8,7 +8,8 @@ const server = http.createServer(app);
 const userRoute = require('./routes/user');
 const loaderRoute = require('./routes/postLoaderAdd');
 const inventoryRoute = require('./routes/postInventoryAdd');
-const messageRoute = require("./routes/message")
+const messageRoute = require("./routes/message");
+const bookingRoute = require("./routes/booking")
 
 const { initializeSocket } = require('./config/socket');
 
@@ -31,7 +32,8 @@ app.get('/', (req, res) => {
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/loader', loaderRoute);
 app.use('/api/v1/inventory', inventoryRoute);
-app.use('/api/v1/message', messageRoute)
+app.use('/api/v1/message', messageRoute);
+app.use("/api/v1/booking", bookingRoute)
 
 const startServer = async () => {
   try {

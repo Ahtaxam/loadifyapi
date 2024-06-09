@@ -44,7 +44,7 @@ const postTruckLoaderAdds = async (req, res, next) => {
 
 const fetchAllLoaders = async (req, res) => {
   try {
-    const loaders = await VEHICLEADD.find({});
+    const loaders = await VEHICLEADD.find({status:"posted"});
     res.status(200).json({
       message: 'loaders fetched successfully',
       data: loaders,
