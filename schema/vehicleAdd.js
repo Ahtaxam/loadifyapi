@@ -77,7 +77,7 @@ const vehicleAddSchema = new mongoose.Schema({
   orderId: {
     ref: "Booking",
     type: mongoose.Schema.Types.ObjectId,
-    default: "",
+    default: null,
   },
 });
 
