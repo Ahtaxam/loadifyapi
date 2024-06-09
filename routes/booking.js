@@ -6,10 +6,11 @@ const {
   shippedInventory,
   getAllActiveInventories,
   getAllLoaderOrder,
+  completeOrder,
 } = require("../controller/booking");
 
 route.put("/shipped", isAuth, shippedInventory);
 route.get("/active", isAuth, getAllActiveInventories);
-// route.get("/loaderorder", isAuth, getAllLoaderOrder);
+route.put("/complete", isAuth, completeOrder);
 
 module.exports = route;

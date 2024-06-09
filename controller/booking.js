@@ -86,7 +86,7 @@ const completeOrder = async (req, res) => {
 
     let loader = await LOADER.findOne({ _id: loaderId });
     loader.status = "posted";
-    loader.orderId = "";
+    loader.orderId = null;
 
     await Promise.all([loader.save(), inventory.save()]);
     res.status(200).json({
@@ -133,5 +133,6 @@ const getAllLoaderOrder = async (req, res) => {
 module.exports = {
   shippedInventory,
   getAllActiveInventories,
+  completeOrder,
   //   getAllLoaderOrder,
 };
