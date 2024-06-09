@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const vehicleAddSchema = new mongoose.Schema({
   vehicleName: {
@@ -66,11 +66,20 @@ const vehicleAddSchema = new mongoose.Schema({
     },
   ],
   postedBy: {
-    ref: 'User',
+    ref: "User",
     type: mongoose.Schema.Types.ObjectId,
-    required:true
+    required: true,
+  },
+  status: {
+    type: String,
+    default: "posted",
+  },
+  orderId: {
+    ref: "Booking",
+    type: mongoose.Schema.Types.ObjectId,
+    default: "",
   },
 });
 
-const vehicleAddModel = new mongoose.model('VehicleAdd', vehicleAddSchema);
+const vehicleAddModel = new mongoose.model("VehicleAdd", vehicleAddSchema);
 module.exports = vehicleAddModel;
