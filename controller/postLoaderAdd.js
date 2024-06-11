@@ -51,6 +51,7 @@ const fetchAllLoaders = async (req, res) => {
       status: 200,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 };
