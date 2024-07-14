@@ -140,6 +140,7 @@ const adminLogin = async (req, res) => {
             "email",
             "role",
             "address",
+            "phoneNumber",
           ]),
           token: token,
         });
