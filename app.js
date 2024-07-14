@@ -12,6 +12,8 @@ const messageRoute = require("./routes/message");
 const bookingRoute = require("./routes/booking");
 const passwordRoute = require("./routes/password");
 const contactUsRoute = require("./routes/contactUs");
+const updateProfileRoute = require("./routes/updateProfile");
+const totalRecordRoute = require("./routes/getRecords");
 
 const { initializeSocket } = require("./config/socket");
 
@@ -38,6 +40,8 @@ app.use("/api/v1/message", messageRoute);
 app.use("/api/v1/booking", bookingRoute);
 app.use("/api/v1/password", passwordRoute);
 app.use("/api/v1/contactus", contactUsRoute);
+app.use("/api/v1/profile", updateProfileRoute);
+app.use("/api/v1/record", totalRecordRoute);
 
 const startServer = async () => {
   try {

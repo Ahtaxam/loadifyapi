@@ -128,6 +128,33 @@ const getCurrentUserInventoryAdds = async (req, res) => {
   }
 };
 
+const fetchAllInventoriesForAdmin = async (req, res) => {
+  try {
+    const inventories = await INVENTORYADD.find();
+    res.status(200).json({
+      message: "inventories fetched successfully",
+      data: inventories,
+      status: 200,
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const deleteInventoryForAdmin = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const add = await INVENTORYADD.findByIdAndDelete({ _id: id });
+    res.status(200).json({
+      message: "Deleted successfully",
+      data: add,
+      status: 200,
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 // const shippedInventory = async (req, res) => {
 //   try {
 //     const { inventoryId, loaderId } = req.body;
@@ -150,7 +177,6 @@ const getCurrentUserInventoryAdds = async (req, res) => {
 //       loaderId,
 //       inventoryId,
 //     });
-
 
 //     await Promise.all([booking.save(), loader.save(), inventory.save()]);
 
@@ -203,6 +229,8 @@ module.exports = {
   getInventoryById,
   deleteInventoryAdd,
   getCurrentUserInventoryAdds,
+  fetchAllInventoriesForAdmin,
+  deleteInventoryForAdmin,
   // shippedInventory,
   // getAllActiveInventories,
 };

@@ -1,6 +1,6 @@
-const Joi = require('joi');
-const { default: mongoose } = require('mongoose');
-const VEHICLEADD = require('../schema/vehicleAdd');
+const Joi = require("joi");
+const { default: mongoose } = require("mongoose");
+const VEHICLEADD = require("../schema/vehicleAdd");
 
 const postTruckLoaderAdds = async (req, res, next) => {
   try {
@@ -14,7 +14,7 @@ const postTruckLoaderAdds = async (req, res, next) => {
     if (!files) {
       return res
         .status(400)
-        .json({ message: 'ERROR: uploading, file! try again' });
+        .json({ message: "ERROR: uploading, file! try again" });
     }
     const cnicPicture = files.cnicPicture ? files.cnicPicture[0].path : null;
     const licencePicture = files.licencePicture
@@ -33,7 +33,7 @@ const postTruckLoaderAdds = async (req, res, next) => {
     });
     const doc = await truckAdd.save();
     res.status(200).json({
-      message: 'Add Posted Successfully',
+      message: "Add Posted Successfully",
       data: doc,
       status: 200,
     });
@@ -44,9 +44,9 @@ const postTruckLoaderAdds = async (req, res, next) => {
 
 const fetchAllLoaders = async (req, res) => {
   try {
-    const loaders = await VEHICLEADD.find({status:"posted"});
+    const loaders = await VEHICLEADD.find({ status: "posted" });
     res.status(200).json({
-      message: 'loaders fetched successfully',
+      message: "loaders fetched successfully",
       data: loaders,
       status: 200,
     });
@@ -62,14 +62,14 @@ const getLoaderById = async (req, res) => {
     const loader = await VEHICLEADD.findById({ _id: id }).populate("postedBy");
     if (!loader) {
       res.status(200).json({
-        message: 'Invalid Id',
+        message: "Invalid Id",
         data: loader,
         status: 402,
       });
       return;
     }
     res.status(200).json({
-      message: 'Fetched successfully',
+      message: "Fetched successfully",
       data: loader,
       status: 200,
     });
@@ -84,14 +84,15 @@ const deleteLoaderAdd = async (req, res) => {
     const add = await VEHICLEADD.findOne({ _id: id });
     if (!add) {
       res.status(200).json({
-        message: 'Invalid Id',
+        message: "Invalid Id",
         status: 402,
       });
       return;
     }
+
     if (add.postedBy.toString() !== req.user._id.toString()) {
       res.status(403).json({
-        message: 'UnAuthorized! you can not perform operation',
+        message: "UnAuthorized! you can not perform operation",
         status: 403,
       });
       return;
@@ -99,7 +100,7 @@ const deleteLoaderAdd = async (req, res) => {
     const loader = await VEHICLEADD.findByIdAndDelete({ _id: id });
 
     res.status(200).json({
-      message: 'Deleted successfully',
+      message: "Deleted successfully",
       data: loader,
       status: 200,
     });
@@ -117,15 +118,38 @@ const getCurrentUserLoaderAdds = async (req, res) => {
     });
     if (!loader) {
       res.status(200).json({
-        message: 'No Add posted',
+        message: "No Add posted",
         data: loader,
         status: 402,
       });
       return;
     }
     res.status(200).json({
-      message: 'Fetched successfully',
+      message: "Fetched successfully",
       data: loader,
+      status: 200,
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const getAllLoaders = async (req, res) => {
+  try {
+    const loaders = await VEHICLEADD.find();
+    res.status(200).json(loaders);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const deleteAddForAdmin = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const add = await VEHICLEADD.findByIdAndDelete({ _id: id });
+    res.status(200).json({
+      message: "Deleted successfully",
+      data: add,
       status: 200,
     });
   } catch (error) {
@@ -158,4 +182,6 @@ module.exports = {
   getLoaderById,
   deleteLoaderAdd,
   getCurrentUserLoaderAdds,
+  getAllLoaders,
+  deleteAddForAdmin,
 };

@@ -8,7 +8,7 @@ const _ = require("lodash");
 const createUser = async (req, res) => {
   const result = validateUser(req.body);
   if (result.error) {
-    res.status(400).json({message:result.error.details[0].message});
+    res.status(400).json({ message: result.error.details[0].message });
     return;
   }
 
@@ -48,7 +48,7 @@ const authUser = async (req, res) => {
   try {
     const result = validateLoginData(req.body);
     if (result.error) {
-      res.status(400).send({message:result.error.details[0].message});
+      res.status(400).send({ message: result.error.details[0].message });
       return;
     }
     const user = await USER.findOne({ email: req.body.email });
@@ -87,9 +87,70 @@ const authUser = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await USER.find({ role: { $ne: "admin" } });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const user = await USER.findByIdAndDelete(req.params.id);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const adminLogin = async (req, res) => {
+  try {
+    const result = validateLoginData(req.body);
+    if (result.error) {
+      res.status(400).send({ message: result.error.details[0].message });
+      return;
+    }
+    const user = await USER.findOne({ email: req.body.email });
+    if (!user || user.role !== "admin") {
+      console.log("INVALID USER");
+      res.status(400).json({ message: "Invalid username or password" });
+      return;
+    } else {
+      const validate = await bcrypt.compare(req.body.password, user.password);
+      if (!validate) {
+        return res
+          .status(400)
+          .json({ message: "Invalid username or password" });
+      }
+      const token = jwt.sign({ _id: user._id }, config.jwtPrivateKey);
+      res
+        .cookie("expressToken", token, {
+          expire: 360000 + Date.now(),
+          httpOnly: false,
+        })
+        .status(200)
+        .send({
+          message: "Login Successsfully...",
+          data: _.pick(user, [
+            "_id",
+            "firstName",
+            "lastName",
+            "email",
+            "role",
+            "address",
+          ]),
+          token: token,
+        });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 function validateUser(user) {
-  const { firstName, lastName, email, password, address, phoneNumber } =
-    user;
+  const { firstName, lastName, email, password, address, phoneNumber } = user;
 
   const schema = Joi.object({
     firstName: Joi.string().required(),
@@ -122,4 +183,4 @@ function validateLoginData(user) {
   return schema.validate({ email, password });
 }
 
-module.exports = { createUser, authUser };
+module.exports = { createUser, authUser, getAllUsers, deleteUser, adminLogin };
