@@ -106,6 +106,53 @@ const deleteInventoryAdd = async (req, res) => {
   }
 };
 
+const updateInventoryAdd = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const add = await INVENTORYADD.findOne({ _id: id });
+    if (!add) {
+      res.status(200).json({
+        message: "Invalid Id",
+        status: 402,
+      });
+      return;
+    }
+    if (add.postedBy.toString() !== req.user._id.toString()) {
+      res.status(403).json({
+        message: "UnAuthorized! you can not perform operation",
+        status: 403,
+      });
+      return;
+    }
+
+    const file = req.files;
+
+    if (!file) {
+      return res
+        .status(400)
+        .json({ message: "ERROR: uploading, file! try again" });
+    }
+    const inventoryPicture = file.inventoryPicture.map((file) => file.path);
+
+    const inventory = await INVENTORYADD.findByIdAndUpdate(
+      { _id: id },
+      { ...req.body, inventoryPicture },
+      {
+        new: true,
+      }
+    );
+
+    res.status(200).json({
+      message: "Updated successfully",
+      data: inventory,
+      status: 200,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+};
+
 const getCurrentUserInventoryAdds = async (req, res) => {
   const userId = new mongoose.Types.ObjectId(req.user._id);
   try {
@@ -231,6 +278,7 @@ module.exports = {
   getCurrentUserInventoryAdds,
   fetchAllInventoriesForAdmin,
   deleteInventoryForAdmin,
+  updateInventoryAdd,
   // shippedInventory,
   // getAllActiveInventories,
 };

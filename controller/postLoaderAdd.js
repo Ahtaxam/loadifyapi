@@ -109,6 +109,61 @@ const deleteLoaderAdd = async (req, res) => {
   }
 };
 
+const updateLoaderAdd = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const add = await VEHICLEADD.findOne({ _id: id });
+    if (!add) {
+      res.status(200).json({
+        message: "Invalid Id",
+        status: 402,
+      });
+      return;
+    }
+    if (add.postedBy.toString() !== req.user._id.toString()) {
+      res.status(403).json({
+        message: "UnAuthorized! you can not perform operation",
+        status: 403,
+      });
+      return;
+    }
+
+    const file = req.files;
+
+    if (!file) {
+      return res
+        .status(400)
+        .json({ message: "ERROR: uploading, file! try again" });
+    }
+    const cnicPicture = file.cnicPicture ? file.cnicPicture[0].path : null;
+    const licencePicture = file.licencePicture
+      ? file.licencePicture[0].path
+      : null;
+    const vehiclePicture = file.vehiclePicture
+      ? file.vehiclePicture.map((file) => file.path)
+      : [];
+
+    const loader = await VEHICLEADD.findByIdAndUpdate(
+      { _id: id },
+      {
+        ...req.body,
+        cnicPicture,
+        licencePicture,
+        vehiclePicture,
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Updated successfully",
+      data: loader,
+      status: 200,
+    });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 const getCurrentUserLoaderAdds = async (req, res) => {
   const userId = new mongoose.Types.ObjectId(req.user._id);
 
@@ -184,4 +239,5 @@ module.exports = {
   getCurrentUserLoaderAdds,
   getAllLoaders,
   deleteAddForAdmin,
+  updateLoaderAdd,
 };

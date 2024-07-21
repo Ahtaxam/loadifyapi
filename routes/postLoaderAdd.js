@@ -7,6 +7,7 @@ const {
   getCurrentUserLoaderAdds,
   getAllLoaders,
   deleteAddForAdmin,
+  updateLoaderAdd,
 } = require("../controller/postLoaderAdd");
 const { canPostLoaderAdd } = require("../middleware/canPostAdd");
 const isAuth = require("../middleware/isAuth");
@@ -39,4 +40,24 @@ route.get("/getAll", getAllLoaders);
 route.get("/:id", getLoaderById);
 route.delete("/:id", isAuth, deleteLoaderAdd);
 route.delete("/admin/delete/:id", deleteAddForAdmin);
+
+route.put(
+  "/updateadd/:id",
+  isAuth,
+  upload.fields([
+    {
+      name: "cnicPicture",
+      maxCount: 1,
+    },
+    {
+      name: "licencePicture",
+      maxCount: 1,
+    },
+    {
+      name: "vehiclePicture",
+      maxCount: 4,
+    },
+  ]),
+  updateLoaderAdd
+);
 module.exports = route;

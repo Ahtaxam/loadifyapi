@@ -9,6 +9,7 @@ const {
   getAllActiveInventories,
   fetchAllInventoriesForAdmin,
   deleteInventoryForAdmin,
+  updateInventoryAdd,
 } = require("../controller/postInventoryAdd");
 const { canPostInventoryAdd } = require("../middleware/canPostAdd");
 const isAuth = require("../middleware/isAuth");
@@ -34,5 +35,16 @@ route.delete("/:id", isAuth, deleteInventoryAdd);
 // route.put("/shipped", isAuth, shippedInventory);
 route.get("/admin/all", fetchAllInventoriesForAdmin);
 route.delete("/admin/delete/:id", deleteInventoryForAdmin);
+route.put(
+  "/updateadd/:id",
+  isAuth,
+  upload.fields([
+    {
+      name: "inventoryPicture",
+      maxCount: 4,
+    },
+  ]),
+  updateInventoryAdd
+);
 
 module.exports = route;
