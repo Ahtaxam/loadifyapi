@@ -134,9 +134,14 @@ const updateInventoryAdd = async (req, res) => {
     }
     const inventoryPicture = file.inventoryPicture.map((file) => file.path);
 
+    const pictures = [
+      ...JSON.parse(req.body.previousImages),
+      ...inventoryPicture,
+    ];
+
     const inventory = await INVENTORYADD.findByIdAndUpdate(
       { _id: id },
-      { ...req.body, inventoryPicture },
+      { ...req.body, inventoryPicture: pictures },
       {
         new: true,
       }

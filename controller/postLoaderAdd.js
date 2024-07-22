@@ -143,29 +143,35 @@ const updateLoaderAdd = async (req, res) => {
       ? file.vehiclePicture.map((file) => file.path)
       : [];
 
+    const pictures = [
+      ...JSON.parse(req.body.previousImages),
+      ...vehiclePicture,
+    ];
+
     const loader = await VEHICLEADD.findByIdAndUpdate(
       { _id: id },
       {
         ...req.body,
         cnicPicture,
         licencePicture,
-        vehiclePicture,
+        vehiclePicture: pictures,
       },
       { new: true }
     );
 
     res.status(200).json({
-      message: "Updated successfully",
+      message: "Add Updated successfully",
       data: loader,
       status: 200,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 };
 
 const getCurrentUserLoaderAdds = async (req, res) => {
-  const userId = new mongoose.Types.ObjectId(req.user._id);
+  const userId = new mongoose.Types.ObjectId(req.user?._id);
 
   try {
     const loader = await VEHICLEADD.find({
